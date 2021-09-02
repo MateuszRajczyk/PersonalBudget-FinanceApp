@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1630519490 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\main.cpp
+	<iostream>
+	"Markup.h"
+	<windows.h>
+	<winbase.h>
+	"PersonalBudget.h"
+	"UserMenager.h"
+	"User.h"
+
+4293264394 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\markup.h
+	<stdlib.h>
+	<string.h>
+	<string>
+	<afx.h>
+
+1630526929 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\filewithusers.cpp
+	"FileWithUsers.h"
+	<windows.h>
+
+1630519490 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\personalbudget.cpp
+	"PersonalBudget.h"
+
+1630517735 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\personalbudget.h
+	<iostream>
+	"UserMenager.h"
+
+1630517735 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\usermenager.h
+	<iostream>
+	<vector>
+	<windows.h>
+	<fstream>
+	<sstream>
+	"FileWithUsers.h"
+	"User.h"
+	"SupplementaryMethods.h"
+	"FileWithUsers.h"
+
+1630526929 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\filewithusers.h
+	<iostream>
+	<vector>
+	"User.h"
+	<fstream>
+	<cstdlib>
+	<string>
+	"SupplementaryMethods.h"
+	"Markup.h"
+
+1630491175 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\user.h
+	<iostream>
+
+1630442862 c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\supplementarymethods.h
+	<iostream>
+
+1630491175 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\user.cpp
+	"User.h"
+
+1630491543 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\supplementarymethods.cpp
+	"SupplementaryMethods.h"
+	<sstream>
+	<algorithm>
+	<windows.h>
+	<fstream>
+
+1630527354 source:c:\users\mateusz\desktop\projekt przysz造programista - obiektowo\personalbudget\usermenager.cpp
+	"UserMenager.h"
+
