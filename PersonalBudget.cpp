@@ -8,12 +8,11 @@ void PersonalBudget::userRegister()
 void PersonalBudget::userLogin()
 {
     userMenager.userLogin();
-    /*
-    if(uzytkownikMenager.czyUzytkownikJestZalogowany())
+
+    if(userMenager.isUserLoggedIn())
     {
-        adresatMenager = new AdresatMenager(NAZWA_PLIKU_Z_ADRESATAMI, uzytkownikMenager.pobierzIdZalogowanegoUzytkownika());
+        financeMenager = new FinanceMenager(NAME_FILE_WITH_INCOMES, NAME_FILE_WITH_EXPENSES, userMenager.loadIdOfLoggedUser());
     }
-    */
 }
 
 char PersonalBudget::selectOptionsFromRegisterMenu()
@@ -26,7 +25,7 @@ char PersonalBudget::selectOptionsFromRegisterMenu()
     cout << "---------------------------" << endl;
     cout << "1. Rejestracja" << endl;
     cout << "2. Logowanie" << endl;
-    cout << "9. Koniec programu" << endl;
+    cout << "3. Koniec programu" << endl;
     cout << "---------------------------" << endl;
     cout << "Twoj wybor: ";
 
@@ -71,6 +70,34 @@ void PersonalBudget::changePasswordOfLoggedUser()
 void PersonalBudget::userLoggingOut()
  {
      userMenager.userLoggingOut();
-     //delete adresatMenager;
-     //adresatMenager = NULL;
+
+     delete financeMenager;
+     financeMenager = NULL;
  }
+
+void PersonalBudget::addIncome()
+{
+    if(userMenager.isUserLoggedIn())
+    {
+        financeMenager->addNewIncome();
+    }
+    else
+    {
+        cout << "Aby dodac przychod, nalezy najpierw sie zalogowac" << endl;
+        system("pause");
+    }
+}
+
+void PersonalBudget::addExpense()
+{
+    if(userMenager.isUserLoggedIn())
+    {
+        financeMenager->addNewExpense();
+    }
+    else
+    {
+        cout << "Aby dodac wydatek, nalezy najpierw sie zalogowac" << endl;
+        system("pause");
+    }
+
+}

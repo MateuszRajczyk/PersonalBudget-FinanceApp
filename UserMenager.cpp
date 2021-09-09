@@ -133,4 +133,12 @@ void UserMenager::userLoggingOut()
     idOfLoggedUser = 0;
 }
 
+bool UserMenager::isUserLoggedIn()
+{
+    if(idOfLoggedUser > 0)
+        return true;
+    else
+        return false;
+}
+
 

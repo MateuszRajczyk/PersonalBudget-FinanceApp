@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 #include "FileWithUsers.h"
+#include "FinanceMenager.h"
+#include "FileWithFinance.h"
 #include "User.h"
 #include "SupplementaryMethods.h"
 #include "FileWithUsers.h"
@@ -23,19 +25,21 @@ class UserMenager
     FileWithUsers fileWithUsers;
 
 
+
     User enterDataOfNewUser();
     int loadIdOfNewUser();
     bool isLoginExist(string login);
 public:
-    UserMenager(string nameFileWithUsers, int idOfLoggedUser = 0) : fileWithUsers(nameFileWithUsers), idOfLoggedUser(idOfLoggedUser) {
-    idOfLoggedUser = 0;
-    users = fileWithUsers.loadUsersFromFile();
+    UserMenager(string nameFileWithUsers, int idOfLoggedUser = 0) : fileWithUsers(nameFileWithUsers), idOfLoggedUser(idOfLoggedUser)  {
+        idOfLoggedUser = 0;
+        users = fileWithUsers.loadUsersFromFile();
     };
     void userRegister();
     int userLogin();
     int loadIdOfLoggedUser();
     void changePasswordOfLoggedUser();
     void userLoggingOut();
+    bool isUserLoggedIn();
 };
 
 #endif

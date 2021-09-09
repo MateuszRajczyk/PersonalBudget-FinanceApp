@@ -15,6 +15,7 @@ public:
     string replaceFirstLetterForBigLetterAndRestForSmallLetters(string text);
     char loadCharacter();
     int loadIntegerNumber();
+    string replaceAmountWithCommaForAmountWithDot(string text);
 };
 
 #endif
