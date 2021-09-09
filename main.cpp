@@ -12,7 +12,7 @@ using namespace std;
 int main()
 {
 
-    PersonalBudget personalBudget("users.xml");
+    PersonalBudget personalBudget("users.xml", "incomes.xml", "expenses.xml");
 
     char select;
 
@@ -30,7 +30,7 @@ int main()
             case '2':
                 personalBudget.userLogin();
                 break;
-            case '9':
+            case '3':
                 exit(0);
                 break;
             default:
@@ -46,10 +46,10 @@ int main()
             switch (select)
             {
             case '1':
-
+                personalBudget.addIncome();
                 break;
             case '2':
-
+                personalBudget.addExpense();
                 break;
             case '3':
 

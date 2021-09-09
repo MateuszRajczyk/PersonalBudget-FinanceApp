@@ -49,6 +49,30 @@ string SupplementaryMethods::replaceFirstLetterForBigLetterAndRestForSmallLetter
     return text;
 }
 
+string SupplementaryMethods::replaceAmountWithCommaForAmountWithDot(string text)
+{
+    string newText = "";
+
+    int lengthWord = text.length();
+
+    if(!text.empty())
+    {
+        for(int i = 0; i < lengthWord; i++)
+        {
+            if(text[i] == ',')
+            {
+                newText += ".";
+            }
+            else
+            {
+                newText += text[i];
+            }
+        }
+    }
+
+    return newText;
+}
+
 char SupplementaryMethods::loadCharacter()
 {
     string entry = "";
