@@ -52,10 +52,10 @@ int main()
                 personalBudget.addExpense();
                 break;
             case '3':
-
+                personalBudget.balanceOfCurrentMonth();
                 break;
             case '4':
-
+                personalBudget.balanceOfPreviousMonth();
                 break;
             case '5':
 

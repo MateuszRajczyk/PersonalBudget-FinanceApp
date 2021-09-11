@@ -1,6 +1,9 @@
 #include "Expense.h"
 
-
+void Expense::setDateConvertionForSort(int newDateConvertionForSort)
+{
+    dateConvertionForSort = newDateConvertionForSort;
+}
 void Expense::setExpenseId(int newExpenseId)
 {
     if(newExpenseId >= 0)
@@ -21,6 +24,11 @@ void Expense::setItem(string newItem)
 void Expense::setAmount(string newAmount)
 {
     amount = newAmount;
+}
+
+int Expense::loadDateConvertionForSort()
+{
+    return dateConvertionForSort;
 }
 
 int Expense::loadExpenseId()

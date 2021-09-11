@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include "FileWithFinance.h"
 #include "Income.h"
 #include "Expense.h"
@@ -48,6 +49,9 @@ public:
     void addExpenseFromCurrentDay();
     bool appendExpenseToFile(Expense expense);
     void addExpenseWithSelectedDate();
+    void balanceOfCurrentMonth();
+    void balanceOfPreviousMonth();
+    int convertDateIntoNumber(string date);
 
 
 };

@@ -54,8 +54,6 @@ void FinanceMenager::addExpenseFromCurrentDay()
 {
     Expense expense;
 
-    vector<Expense>expenses;
-
     system("cls");
 
     cout << " >>> DODAWANIE WYDATKU Z DZISIEJSZA DATA <<<" << endl << endl;
@@ -76,8 +74,6 @@ void FinanceMenager::addExpenseFromCurrentDay()
 void FinanceMenager::addExpenseWithSelectedDate()
 {
     Expense expense;
-
-    vector<Expense>expenses;
 
     system("cls");
 
@@ -101,8 +97,6 @@ void FinanceMenager::addIncomeWithSelectedDate()
 {
     Income income;
 
-    vector<Income>incomes;
-
     system("cls");
 
     cout << " >>> DODAWANIE PRZYCHODU Z WYBRANA DATA <<<" << endl << endl;
@@ -123,8 +117,6 @@ void FinanceMenager::addIncomeWithSelectedDate()
 void FinanceMenager::addIncomeFromCurrentDay()
 {
     Income income;
-
-    vector<Income>incomes;
 
     system("cls");
 
@@ -150,6 +142,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
 
     string date, item, amount;
     int dateYear, dateMonth, dateDay;
+    int dateNumberForSort = 0;
 
 
     cout << "Podaj wybrana date: ";
@@ -162,6 +155,8 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
     }
 
     expense.setDate(date);
+    dateNumberForSort = convertDateIntoNumber(date);
+    expense.setDateConvertionForSort(dateNumberForSort);
 
     expense.setUserId(ID_OF_LOGGED_USER);
     expense.setExpenseId((fileWithFinance.loadIdLastExpense()+1));
@@ -187,6 +182,7 @@ Income FinanceMenager::enterDataOfNewIncomeWithSelectedDate()
 
     string date, item, amount;
     int dateYear, dateMonth, dateDay;
+    int dateNumberForSort = 0;
 
 
     cout << "Podaj wybrana date: ";
@@ -199,6 +195,8 @@ Income FinanceMenager::enterDataOfNewIncomeWithSelectedDate()
     }
 
     income.setDate(date);
+    dateNumberForSort = convertDateIntoNumber(date);
+    income.setDateConvertionForSort(dateNumberForSort);
 
     income.setUserId(ID_OF_LOGGED_USER);
     income.setIncomeId((fileWithFinance.loadIdLastIncome()+1));
@@ -225,6 +223,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
     GetSystemTime(&st);
 
     string date, item, amount;
+    int dateNumberForSort = 0;
 
     expense.setUserId(ID_OF_LOGGED_USER);
     expense.setExpenseId((fileWithFinance.loadIdLastExpense() + 1));
@@ -250,6 +249,10 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
         expense.setDate(date);
     }
 
+
+    dateNumberForSort = convertDateIntoNumber(date);
+    expense.setDateConvertionForSort(dateNumberForSort);
+
     cout << "Przychod tytulem: ";
     item = supplementaryMethods.loadTextLine();
     item = supplementaryMethods.replaceFirstLetterForBigLetterAndRestForSmallLetters(item);
@@ -271,6 +274,7 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
     GetSystemTime(&st);
 
     string date, item, amount;
+    int dateNumberForSort = 0;
 
     income.setUserId(ID_OF_LOGGED_USER);
     income.setIncomeId((fileWithFinance.loadIdLastIncome()+1));
@@ -296,6 +300,10 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
         income.setDate(date);
     }
 
+
+    dateNumberForSort = convertDateIntoNumber(date);
+    income.setDateConvertionForSort(dateNumberForSort);
+
     cout << "Przychod tytulem: ";
     item = supplementaryMethods.loadTextLine();
     item = supplementaryMethods.replaceFirstLetterForBigLetterAndRestForSmallLetters(item);
@@ -307,6 +315,26 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
     income.setAmount(amount);
 
     return income;
+}
+
+int FinanceMenager::convertDateIntoNumber(string date)
+{
+    string dateNoHyphen = "";
+    int dateNumberId = 0;
+
+    SupplementaryMethods supplementaryMethods;
+
+    for(int i = 0; i < date.length(); i++)
+    {
+        if(date[i] != '-')
+        {
+            dateNoHyphen += date[i];
+        }
+    }
+
+    dateNumberId = supplementaryMethods.conversionStringToInteger(dateNoHyphen);
+
+    return dateNumberId;
 }
 
 char FinanceMenager::selectOptionsFromAddIncomeMenu()
@@ -462,4 +490,261 @@ bool FinanceMenager::isLeapYear(int year)
     {
         return false;
     }
+}
+
+void FinanceMenager::balanceOfCurrentMonth()
+{
+    Income income;
+    Expense expense;
+    SupplementaryMethods supplementaryMethods;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
+    int sumOfIncomes = 0;
+    int sumOfExpenses = 0;
+
+    sort(incomes.begin(), incomes.end(), [](Income &lhs, Income &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    sort(expenses.begin(), expenses.end(), [](Expense &lhs, Expense &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    cout << endl;
+    cout << "Przychody" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    vector <Income>::iterator itr1;
+    for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
+    {
+        date = itr1->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+
+        if((checkDateYear == st.wYear) && (checkDateMonth == st.wMonth))
+        {
+            cout << itr1->loadDate() << " -- " << itr1->loadItem() << " -- " << itr1->loadAmount() << " " << "zl" << endl;
+            sumOfIncomes += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        date.clear();
+    }
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    vector <Expense>::iterator itr2;
+    for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
+    {
+        date = itr2->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+
+        if((checkDateYear == st.wYear) && (checkDateMonth == st.wMonth))
+        {
+            cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
+            sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr2->loadAmount());
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        date.clear();
+    }
+
+    cout << endl;
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+
+    cout << "Suma przychodow: " << sumOfIncomes << " " << "zl" << endl;
+    cout << endl;
+    cout << "Suma wydatkow: " << sumOfExpenses << " " << "zl" << endl;
+    cout << endl;
+    if((sumOfIncomes - sumOfExpenses) > 0)
+    {
+        cout << "Oszczednosci: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else if((sumOfIncomes - sumOfExpenses) < 0)
+    {
+        cout << "Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else
+    {
+        cout << "Oszczednosci / Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+
+    cout << endl;
+    system("pause");
+}
+
+void FinanceMenager::balanceOfPreviousMonth()
+{
+    Income income;
+    Expense expense;
+    SupplementaryMethods supplementaryMethods;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
+    int sumOfIncomes = 0;
+    int sumOfExpenses = 0;
+
+    sort(incomes.begin(), incomes.end(), [](Income &lhs, Income &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    sort(expenses.begin(), expenses.end(), [](Expense &lhs, Expense &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    cout << endl;
+    cout << "Przychody" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    vector <Income>::iterator itr1;
+    for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
+    {
+        date = itr1->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+
+        if(st.wMonth == 1)
+        {
+            if((checkDateYear == st.wYear - 1) && (checkDateMonth == 12))
+            {
+                cout << itr1->loadDate() << " -- " << itr1->loadItem() << " -- " << itr1->loadAmount() << " " << "zl" << endl;
+                sumOfIncomes += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+            }
+        }
+        else if((checkDateYear == st.wYear) && (checkDateMonth == (st.wMonth - 1)))
+        {
+            cout << itr1->loadDate() << " -- " << itr1->loadItem() << " -- " << itr1->loadAmount() << " " << "zl" << endl;
+            sumOfIncomes += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        date.clear();
+    }
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    vector <Expense>::iterator itr2;
+    for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
+    {
+        date = itr2->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+
+        if(st.wMonth == 1)
+        {
+            if((checkDateYear == st.wYear - 1) && (checkDateMonth == 12))
+            {
+                cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
+                sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+            }
+        }
+        else if((checkDateYear == st.wYear) && (checkDateMonth == (st.wMonth - 1)))
+        {
+            cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
+            sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr2->loadAmount());
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        date.clear();
+    }
+
+    cout << endl;
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+
+    cout << "Suma przychodow: " << sumOfIncomes << " " << "zl" << endl;
+    cout << endl;
+    cout << "Suma wydatkow: " << sumOfExpenses << " " << "zl" << endl;
+    cout << endl;
+
+    if((sumOfIncomes - sumOfExpenses) > 0)
+    {
+        cout << "Oszczednosci: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else if((sumOfIncomes - sumOfExpenses) < 0)
+    {
+        cout << "Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else
+    {
+        cout << "Oszczednosci / Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+
+    cout << endl;
+    system("pause");
 }

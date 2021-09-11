@@ -1,5 +1,9 @@
 #include "Income.h"
 
+void Income::setDateConvertionForSort(int newDateConvertionForSort)
+{
+    dateConvertionForSort = newDateConvertionForSort;
+}
 void Income::setIncomeId(int newIncomeId)
 {
     if(newIncomeId >= 0)
@@ -20,6 +24,11 @@ void Income::setItem(string newItem)
 void Income::setAmount(string newAmount)
 {
     amount = newAmount;
+}
+
+int Income::loadDateConvertionForSort()
+{
+    return dateConvertionForSort;
 }
 
 int Income::loadIncomeId()
