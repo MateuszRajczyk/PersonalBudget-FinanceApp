@@ -101,3 +101,19 @@ void PersonalBudget::addExpense()
     }
 
 }
+
+void PersonalBudget::balanceOfCurrentMonth()
+{
+    if(userMenager.isUserLoggedIn())
+    {
+        financeMenager->balanceOfCurrentMonth();
+    }
+}
+
+void PersonalBudget::balanceOfPreviousMonth()
+{
+    if(userMenager.isUserLoggedIn())
+    {
+        financeMenager->balanceOfPreviousMonth();
+    }
+}

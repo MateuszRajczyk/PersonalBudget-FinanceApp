@@ -9,6 +9,7 @@ class Income
 {
     int incomeId;
     int userId;
+    int dateConvertionForSort;
     string date;
     string item;
     string amount;
@@ -18,12 +19,14 @@ public:
     void setDate(string newDate);
     void setItem(string newItem);
     void setAmount(string newAmount);
+    void setDateConvertionForSort(int newDateConvertionForSort);
 
     int loadIncomeId();
     int loadUserId();
     string loadDate();
     string loadItem();
     string loadAmount();
+    int loadDateConvertionForSort();
 
 };
 

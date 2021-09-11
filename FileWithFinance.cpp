@@ -41,6 +41,7 @@ bool FileWithFinance::appendIncomeToFile(Income income)
         xml.IntoElem();
         xml.AddElem( "userId", income.loadUserId());
         xml.AddElem( "incomeId", income.loadIncomeId());
+        xml.AddElem( "dateConvertionForSort", income.loadDateConvertionForSort());
         xml.AddElem( "date", income.loadDate());
         xml.AddElem( "item", income.loadItem());
         xml.AddElem( "amount", income.loadAmount());
@@ -79,6 +80,7 @@ bool FileWithFinance::appendExpenseToFile(Expense expense)
         xml.IntoElem();
         xml.AddElem( "userId", expense.loadUserId());
         xml.AddElem( "expenseId", expense.loadExpenseId());
+        xml.AddElem( "dateConvertionForSort", expense.loadDateConvertionForSort());
         xml.AddElem( "date", expense.loadDate());
         xml.AddElem( "item", expense.loadItem());
         xml.AddElem( "amount", expense.loadAmount());
@@ -123,6 +125,9 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
             income.setIncomeId(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
             setIdLastIncome(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
 
+            xml.FindChildElem("dateConvertionForSort");
+            income.setDateConvertionForSort(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
+
             xml.FindChildElem( "date" );
             income.setDate(xml.GetChildData());
 
@@ -164,6 +169,9 @@ vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLogged
             xml.FindChildElem( "expenseId" );
             expense.setExpenseId(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
             setIdLastExpense(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
+
+            xml.FindChildElem("dateConvertionForSort");
+            expense.setDateConvertionForSort(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
 
             xml.FindChildElem( "date" );
             expense.setDate(xml.GetChildData());
