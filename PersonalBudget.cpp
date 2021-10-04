@@ -110,6 +110,14 @@ void PersonalBudget::balanceOfCurrentMonth()
     }
 }
 
+void PersonalBudget::balanceOfSelectedPeriod()
+{
+    if(userMenager.isUserLoggedIn())
+    {
+        financeMenager->balanceOfSelectedPeriod();
+    }
+}
+
 void PersonalBudget::balanceOfPreviousMonth()
 {
     if(userMenager.isUserLoggedIn())
