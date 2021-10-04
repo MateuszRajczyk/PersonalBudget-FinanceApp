@@ -52,6 +52,7 @@ public:
     void balanceOfCurrentMonth();
     void balanceOfPreviousMonth();
     int convertDateIntoNumber(string date);
+    void balanceOfSelectedPeriod();
 
 
 };

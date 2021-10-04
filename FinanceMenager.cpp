@@ -748,3 +748,270 @@ void FinanceMenager::balanceOfPreviousMonth()
     cout << endl;
     system("pause");
 }
+
+void FinanceMenager::balanceOfSelectedPeriod()
+{
+    Income income;
+    Expense expense;
+    SupplementaryMethods supplementaryMethods;
+
+    string date, dateYear, dateMonth, dateDay;
+    string dateFrom, dateFromYear, dateFromMonth, dateFromDay;
+    string dateTo, dateToYear, dateToMonth, dateToDay;
+
+    int checkDateYear, checkDateMonth, checkDateDay;
+    int checkDateFromYear, checkDateFromMonth, checkDateFromDay;
+    int checkDateToYear, checkDateToMonth, checkDateToDay;
+    int checkYearCounter, checkMonthCounter, checkDayCounter;
+
+    int sumOfIncomes = 0;
+    int sumOfExpenses = 0;
+
+    sort(incomes.begin(), incomes.end(), [](Income &lhs, Income &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    sort(expenses.begin(), expenses.end(), [](Expense &lhs, Expense &rhs) {
+      return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
+    });
+
+    cout << endl;
+    cout << "Okres czasu od daty (rrrr-mm-dd): ";
+    dateFrom = supplementaryMethods.loadTextLine();
+    cout << endl;
+    cout << "Okres czasu do daty (rrrr-mm-dd): ";
+    dateTo = supplementaryMethods.loadTextLine();
+
+    cout << endl;
+    cout << "Przychody" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    int counter = 0;
+    vector <Income>::iterator itr1;
+    for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
+    {
+        date = itr1->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+                if(counter == 0)
+                {
+                    dateFromYear += dateFrom[i];
+                    dateToYear += dateTo[i];
+                }
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+                if(counter == 0)
+                {
+                    dateFromMonth += dateFrom[i];
+                    dateToMonth += dateTo[i];
+                }
+            }
+            else if(i > 7)
+            {
+                dateDay += date[i];
+                if(counter == 0)
+                {
+                    dateFromDay += dateFrom[i];
+                    dateToDay += dateTo[i];
+                }
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+        checkDateDay = supplementaryMethods.conversionStringToInteger(dateDay);
+
+        if(counter == 0)
+        {
+            checkDateFromYear = supplementaryMethods.conversionStringToInteger(dateFromYear);
+            checkDateFromMonth = supplementaryMethods.conversionStringToInteger(dateFromMonth);
+            checkDateFromDay = supplementaryMethods.conversionStringToInteger(dateFromDay);
+
+            checkDateToYear = supplementaryMethods.conversionStringToInteger(dateToYear);
+            checkDateToMonth = supplementaryMethods.conversionStringToInteger(dateToMonth);
+            checkDateToDay = supplementaryMethods.conversionStringToInteger(dateToDay);
+        }
+
+        counter++;
+
+        checkYearCounter = checkDateFromYear;
+        checkMonthCounter = checkDateFromMonth;
+        checkDayCounter = checkDateFromDay;
+
+        while((checkDateToYear != checkYearCounter) || (checkDateToMonth != checkMonthCounter) || (checkDateToDay != checkDayCounter))
+        {
+            if((checkYearCounter == checkDateYear) && (checkMonthCounter == checkDateMonth) && (checkDayCounter == checkDateDay))
+            {
+                    cout << itr1->loadDate() << " -- " << itr1->loadItem() << " -- " << itr1->loadAmount() << " " << "zl" << endl;
+                    sumOfIncomes += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+                    break;
+            }
+
+            if(numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
+            {
+                checkDayCounter++;
+            }
+            else if(checkMonthCounter < 12)
+            {
+                checkMonthCounter++;
+                checkDayCounter = 1;
+            }
+            else
+            {
+                checkYearCounter++;
+                checkDayCounter = 1;
+                checkMonthCounter = 1;
+            }
+        }
+
+        if((checkYearCounter == checkDateYear) && (checkMonthCounter == checkDateMonth) && (checkDayCounter == checkDateDay))
+        {
+            if((checkDateToYear == checkYearCounter) && (checkDateToMonth == checkMonthCounter) && (checkDateToDay == checkDayCounter))
+            {
+                cout << itr1->loadDate() << " -- " << itr1->loadItem() << " -- " << itr1->loadAmount() << " " << "zl" << endl;
+                sumOfIncomes += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+            }
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        dateDay.clear();
+        date.clear();
+    }
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    vector <Expense>::iterator itr2;
+    for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
+    {
+        date = itr2->loadDate();
+
+        for(int i = 0; i < date.length(); i++)
+        {
+            if(i < 4)
+            {
+                dateYear += date[i];
+                if(counter == 0)
+                {
+                    dateFromYear += dateFrom[i];
+                    dateToYear += dateTo[i];
+                }
+            }
+            else if((i > 4) && (i < 7))
+            {
+                dateMonth += date[i];
+                if(counter == 0)
+                {
+                    dateFromMonth += dateFrom[i];
+                    dateToMonth += dateTo[i];
+                }
+            }
+            else if(i > 7)
+            {
+                dateDay += date[i];
+                if(counter == 0)
+                {
+                    dateFromDay += dateFrom[i];
+                    dateToDay += dateTo[i];
+                }
+            }
+        }
+
+        checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
+        checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
+        checkDateDay = supplementaryMethods.conversionStringToInteger(dateDay);
+
+        if(counter == 0)
+        {
+            checkDateFromYear = supplementaryMethods.conversionStringToInteger(dateFromYear);
+            checkDateFromMonth = supplementaryMethods.conversionStringToInteger(dateFromMonth);
+            checkDateFromDay = supplementaryMethods.conversionStringToInteger(dateFromDay);
+
+            checkDateToYear = supplementaryMethods.conversionStringToInteger(dateToYear);
+            checkDateToMonth = supplementaryMethods.conversionStringToInteger(dateToMonth);
+            checkDateToDay = supplementaryMethods.conversionStringToInteger(dateToDay);
+        }
+
+        counter++;
+
+        checkYearCounter = checkDateFromYear;
+        checkMonthCounter = checkDateFromMonth;
+        checkDayCounter = checkDateFromDay;
+
+        while((checkDateToYear != checkYearCounter) || (checkDateToMonth != checkMonthCounter) || (checkDateToDay != checkDayCounter))
+        {
+            if((checkYearCounter == checkDateYear) && (checkMonthCounter == checkDateMonth) && (checkDayCounter == checkDateDay))
+            {
+                    cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
+                    sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr2->loadAmount());
+                    break;
+            }
+
+            if(numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
+            {
+                checkDayCounter++;
+            }
+            else if(checkMonthCounter < 12)
+            {
+                checkMonthCounter++;
+                checkDayCounter = 1;
+            }
+            else
+            {
+                checkYearCounter++;
+                checkDayCounter = 1;
+                checkMonthCounter = 1;
+            }
+        }
+
+        if((checkYearCounter == checkDateYear) && (checkMonthCounter == checkDateMonth) && (checkDayCounter == checkDateDay))
+        {
+            if((checkDateToYear == checkYearCounter) && (checkDateToMonth == checkMonthCounter) && (checkDateToDay == checkDayCounter))
+            {
+                cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
+                sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr2->loadAmount());
+            }
+        }
+
+        dateYear.clear();
+        dateMonth.clear();
+        dateDay.clear();
+        date.clear();
+    }
+
+    cout << endl;
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+
+    cout << "Suma przychodow: " << sumOfIncomes << " " << "zl" << endl;
+    cout << endl;
+    cout << "Suma wydatkow: " << sumOfExpenses << " " << "zl" << endl;
+    cout << endl;
+
+    if((sumOfIncomes - sumOfExpenses) > 0)
+    {
+        cout << "Oszczednosci: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else if((sumOfIncomes - sumOfExpenses) < 0)
+    {
+        cout << "Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+    else
+    {
+        cout << "Oszczednosci / Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
+    }
+
+    cout << endl;
+    system("pause");
+}
