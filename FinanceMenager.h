@@ -34,6 +34,8 @@ public:
     FinanceMenager(string nameFileWithIncomes, string nameFileWithExpenses, int idOfLoggedUser)
         : fileWithFinance(nameFileWithIncomes, nameFileWithExpenses), ID_OF_LOGGED_USER(idOfLoggedUser)
     {
+        fileWithFinance.readIdLastExpense();
+        fileWithFinance.readIdLastIncome();
         incomes = fileWithFinance.loadIncomesOfLoggedUserFromFile(ID_OF_LOGGED_USER);
         expenses = fileWithFinance.loadExpensesOfLoggedUserFromFile(ID_OF_LOGGED_USER);
     };
@@ -51,7 +53,7 @@ public:
     void addExpenseWithSelectedDate();
     void balanceOfCurrentMonth();
     void balanceOfPreviousMonth();
-    int convertDateIntoNumber(string date);
+    //int convertDateIntoNumber(string date);
     void balanceOfSelectedPeriod();
 
 

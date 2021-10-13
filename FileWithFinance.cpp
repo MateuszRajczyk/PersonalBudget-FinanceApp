@@ -1,4 +1,27 @@
 #include "FileWithFinance.h"
+#include "windows.h"
+#include "FinanceMenager.h"
+
+int FileWithFinance::convertDateIntoNumber(string date)
+{
+    string dateNoHyphen = "";
+    int dateNumberId = 0;
+
+    SupplementaryMethods supplementaryMethods;
+
+    for(int i = 0; i < date.length(); i++)
+    {
+        if(date[i] != '-')
+        {
+            dateNoHyphen += date[i];
+        }
+    }
+
+    dateNumberId = supplementaryMethods.conversionStringToInteger(dateNoHyphen);
+
+    return dateNumberId;
+}
+
 
 int FileWithFinance::loadIdLastIncome()
 {
@@ -41,7 +64,6 @@ bool FileWithFinance::appendIncomeToFile(Income income)
         xml.IntoElem();
         xml.AddElem( "userId", income.loadUserId());
         xml.AddElem( "incomeId", income.loadIncomeId());
-        xml.AddElem( "dateConvertionForSort", income.loadDateConvertionForSort());
         xml.AddElem( "date", income.loadDate());
         xml.AddElem( "item", income.loadItem());
         xml.AddElem( "amount", income.loadAmount());
@@ -80,7 +102,6 @@ bool FileWithFinance::appendExpenseToFile(Expense expense)
         xml.IntoElem();
         xml.AddElem( "userId", expense.loadUserId());
         xml.AddElem( "expenseId", expense.loadExpenseId());
-        xml.AddElem( "dateConvertionForSort", expense.loadDateConvertionForSort());
         xml.AddElem( "date", expense.loadDate());
         xml.AddElem( "item", expense.loadItem());
         xml.AddElem( "amount", expense.loadAmount());
@@ -104,6 +125,7 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
     vector<Income> incomes;
     Income income;
     SupplementaryMethods supplementaryMethods;
+    int dateNumberForSort = 0;
 
     xml.Load( "incomes.xml" );
 
@@ -123,13 +145,11 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
 
             xml.FindChildElem( "incomeId" );
             income.setIncomeId(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
-            setIdLastIncome(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
-
-            xml.FindChildElem("dateConvertionForSort");
-            income.setDateConvertionForSort(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
 
             xml.FindChildElem( "date" );
             income.setDate(xml.GetChildData());
+            dateNumberForSort = convertDateIntoNumber(xml.GetChildData());
+            income.setDateConvertionForSort(dateNumberForSort);
 
             xml.FindChildElem( "item" );
             income.setItem(xml.GetChildData());
@@ -143,12 +163,33 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
     return incomes;
 }
 
+void FileWithFinance::readIdLastIncome()
+{
+    CMarkup xml;
+    SupplementaryMethods supplementaryMethods;
+
+    xml.Load( "incomes.xml" );
+
+    xml.ResetPos();
+
+    xml.FindElem();
+
+    xml.IntoElem();
+
+    while ( xml.FindElem("Income") )
+    {
+        xml.FindChildElem( "incomeId" );
+        idLastIncome = supplementaryMethods.conversionStringToInteger(xml.GetChildData());
+    }
+}
+
 vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLoggedUser)
 {
     CMarkup xml;
     vector<Expense> expenses;
     Expense expense;
     SupplementaryMethods supplementaryMethods;
+    int dateNumberForSort = 0;
 
     xml.Load( "expenses.xml" );
 
@@ -168,13 +209,11 @@ vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLogged
 
             xml.FindChildElem( "expenseId" );
             expense.setExpenseId(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
-            setIdLastExpense(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
-
-            xml.FindChildElem("dateConvertionForSort");
-            expense.setDateConvertionForSort(supplementaryMethods.conversionStringToInteger(xml.GetChildData()));
 
             xml.FindChildElem( "date" );
             expense.setDate(xml.GetChildData());
+            dateNumberForSort = convertDateIntoNumber(xml.GetChildData());
+            expense.setDateConvertionForSort(dateNumberForSort);
 
             xml.FindChildElem( "item" );
             expense.setItem(xml.GetChildData());
@@ -186,4 +225,24 @@ vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLogged
         }
     }
     return expenses;
+}
+
+void FileWithFinance::readIdLastExpense()
+{
+    CMarkup xml;
+    SupplementaryMethods supplementaryMethods;
+
+    xml.Load( "expenses.xml" );
+
+    xml.ResetPos();
+
+    xml.FindElem();
+
+    xml.IntoElem();
+
+    while ( xml.FindElem("Expense") )
+    {
+        xml.FindChildElem( "expenseId" );
+        idLastExpense = supplementaryMethods.conversionStringToInteger(xml.GetChildData());
+    }
 }
