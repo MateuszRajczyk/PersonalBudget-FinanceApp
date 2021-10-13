@@ -155,7 +155,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
     }
 
     expense.setDate(date);
-    dateNumberForSort = convertDateIntoNumber(date);
+    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
     expense.setDateConvertionForSort(dateNumberForSort);
 
     expense.setUserId(ID_OF_LOGGED_USER);
@@ -195,11 +195,11 @@ Income FinanceMenager::enterDataOfNewIncomeWithSelectedDate()
     }
 
     income.setDate(date);
-    dateNumberForSort = convertDateIntoNumber(date);
+    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
     income.setDateConvertionForSort(dateNumberForSort);
 
     income.setUserId(ID_OF_LOGGED_USER);
-    income.setIncomeId((fileWithFinance.loadIdLastIncome()+1));
+    income.setIncomeId((fileWithFinance.loadIdLastIncome() + 1));
 
     cout << "Przychod tytulem: ";
     item = supplementaryMethods.loadTextLine();
@@ -250,7 +250,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
     }
 
 
-    dateNumberForSort = convertDateIntoNumber(date);
+    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
     expense.setDateConvertionForSort(dateNumberForSort);
 
     cout << "Przychod tytulem: ";
@@ -275,9 +275,8 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
 
     string date, item, amount;
     int dateNumberForSort = 0;
-
     income.setUserId(ID_OF_LOGGED_USER);
-    income.setIncomeId((fileWithFinance.loadIdLastIncome()+1));
+    income.setIncomeId(fileWithFinance.loadIdLastIncome() + 1);
 
     if((st.wMonth < 10) && (st.wDay < 10))
     {
@@ -301,7 +300,7 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
     }
 
 
-    dateNumberForSort = convertDateIntoNumber(date);
+    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
     income.setDateConvertionForSort(dateNumberForSort);
 
     cout << "Przychod tytulem: ";
@@ -315,26 +314,6 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
     income.setAmount(amount);
 
     return income;
-}
-
-int FinanceMenager::convertDateIntoNumber(string date)
-{
-    string dateNoHyphen = "";
-    int dateNumberId = 0;
-
-    SupplementaryMethods supplementaryMethods;
-
-    for(int i = 0; i < date.length(); i++)
-    {
-        if(date[i] != '-')
-        {
-            dateNoHyphen += date[i];
-        }
-    }
-
-    dateNumberId = supplementaryMethods.conversionStringToInteger(dateNoHyphen);
-
-    return dateNumberId;
 }
 
 char FinanceMenager::selectOptionsFromAddIncomeMenu()

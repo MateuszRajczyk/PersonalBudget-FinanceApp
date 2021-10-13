@@ -1,5 +1,6 @@
 #include "Income.h"
 
+
 void Income::setDateConvertionForSort(int newDateConvertionForSort)
 {
     dateConvertionForSort = newDateConvertionForSort;

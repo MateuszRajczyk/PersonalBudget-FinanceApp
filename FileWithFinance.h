@@ -24,6 +24,9 @@ public:
         idLastIncome = 0;
         idLastExpense = 0;
     };
+    void readIdLastIncome();
+    void readIdLastExpense();
+    int convertDateIntoNumber(string date);
     int loadIdLastIncome();
     int setIdLastIncome(int newIdLastIncome);
     int loadIdLastExpense();
