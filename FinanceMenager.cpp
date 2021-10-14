@@ -162,12 +162,12 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
     expense.setUserId(ID_OF_LOGGED_USER);
     expense.setExpenseId((fileWithFinance.loadIdLastExpense()+1));
 
-    cout << "Przychod tytulem: ";
+    cout << "Wydatek tytulem: ";
     item = supplementaryMethods.loadTextLine();
     item = supplementaryMethods.replaceFirstLetterForBigLetterAndRestForSmallLetters(item);
     expense.setItem(item);
 
-    cout << "Kwota przychodu: ";
+    cout << "Kwota wydatku: ";
     amount = supplementaryMethods.loadTextLine();
     amount = supplementaryMethods.replaceAmountWithCommaForAmountWithDot(amount);
     expense.setAmount(amount);
@@ -235,12 +235,12 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
     dateNumberForSort = dateMenager.convertDateIntoNumber(date);
     expense.setDateConvertionForSort(dateNumberForSort);
 
-    cout << "Przychod tytulem: ";
+    cout << "Wydatek tytulem: ";
     item = supplementaryMethods.loadTextLine();
     item = supplementaryMethods.replaceFirstLetterForBigLetterAndRestForSmallLetters(item);
     expense.setItem(item);
 
-    cout << "Kwota przychodu: ";
+    cout << "Kwota wydatku: ";
     amount = supplementaryMethods.loadTextLine();
     amount = supplementaryMethods.replaceAmountWithCommaForAmountWithDot(amount);
     expense.setAmount(amount);
