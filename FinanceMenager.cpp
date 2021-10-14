@@ -139,6 +139,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
 {
     Expense expense;
     SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
 
     string date, item, amount;
     int dateYear, dateMonth, dateDay;
@@ -148,14 +149,14 @@ Expense FinanceMenager::enterDataOfNewExpenseWithSelectedDate()
     cout << "Podaj wybrana date: ";
     date = supplementaryMethods.loadTextLine();
 
-    while(isDateCorrect(date) == false)
+    while(dateMenager.isDateCorrect(date) == false)
     {
         cout << "Niepoprawny format daty lub zakres! Podaj poprawna date: ";
         date = supplementaryMethods.loadTextLine();
     }
 
     expense.setDate(date);
-    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
+    dateNumberForSort = dateMenager.convertDateIntoNumber(date);
     expense.setDateConvertionForSort(dateNumberForSort);
 
     expense.setUserId(ID_OF_LOGGED_USER);
@@ -179,6 +180,7 @@ Income FinanceMenager::enterDataOfNewIncomeWithSelectedDate()
 {
     Income income;
     SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
 
     string date, item, amount;
     int dateYear, dateMonth, dateDay;
@@ -188,14 +190,14 @@ Income FinanceMenager::enterDataOfNewIncomeWithSelectedDate()
     cout << "Podaj wybrana date: ";
     date = supplementaryMethods.loadTextLine();
 
-    while(isDateCorrect(date) == false)
+    while(dateMenager.isDateCorrect(date) == false)
     {
         cout << "Niepoprawny format daty lub zakres! Podaj poprawna date: ";
         date = supplementaryMethods.loadTextLine();
     }
 
     income.setDate(date);
-    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
+    dateNumberForSort = dateMenager.convertDateIntoNumber(date);
     income.setDateConvertionForSort(dateNumberForSort);
 
     income.setUserId(ID_OF_LOGGED_USER);
@@ -219,8 +221,7 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
 {
     Expense expense;
     SupplementaryMethods supplementaryMethods;
-    SYSTEMTIME st;
-    GetSystemTime(&st);
+    DateMenager dateMenager;
 
     string date, item, amount;
     int dateNumberForSort = 0;
@@ -228,29 +229,10 @@ Expense FinanceMenager::enterDataOfNewExpenseWithCurrentDate()
     expense.setUserId(ID_OF_LOGGED_USER);
     expense.setExpenseId((fileWithFinance.loadIdLastExpense() + 1));
 
-    if((st.wMonth < 10) && (st.wDay < 10))
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        expense.setDate(date);
-    }
-    else if(st.wMonth < 10)
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        expense.setDate(date);
-    }
-    else if(st.wDay < 10)
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        expense.setDate(date);
-    }
-    else
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        expense.setDate(date);
-    }
+    date = dateMenager.setDateInCorrectFormat(date);
+    expense.setDate(date);
 
-
-    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
+    dateNumberForSort = dateMenager.convertDateIntoNumber(date);
     expense.setDateConvertionForSort(dateNumberForSort);
 
     cout << "Przychod tytulem: ";
@@ -270,37 +252,17 @@ Income FinanceMenager::enterDataOfNewIncomeWithCurrentDate()
 {
     Income income;
     SupplementaryMethods supplementaryMethods;
-    SYSTEMTIME st;
-    GetSystemTime(&st);
+    DateMenager dateMenager;
 
     string date, item, amount;
     int dateNumberForSort = 0;
     income.setUserId(ID_OF_LOGGED_USER);
     income.setIncomeId(fileWithFinance.loadIdLastIncome() + 1);
 
-    if((st.wMonth < 10) && (st.wDay < 10))
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        income.setDate(date);
-    }
-    else if(st.wMonth < 10)
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        income.setDate(date);
-    }
-    else if(st.wDay < 10)
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + "0" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        income.setDate(date);
-    }
-    else
-    {
-        date = supplementaryMethods.conversionIntegerToString(st.wYear) + "-" + supplementaryMethods.conversionIntegerToString(st.wMonth) + "-" + supplementaryMethods.conversionIntegerToString(st.wDay);
-        income.setDate(date);
-    }
+    date = dateMenager.setDateInCorrectFormat(date);
+    income.setDate(date);
 
-
-    dateNumberForSort = fileWithFinance.convertDateIntoNumber(date);
+    dateNumberForSort = dateMenager.convertDateIntoNumber(date);
     income.setDateConvertionForSort(dateNumberForSort);
 
     cout << "Przychod tytulem: ";
@@ -350,138 +312,10 @@ char FinanceMenager::selectOptionsFromAddExpenseMenu()
     return select;
 }
 
-bool FinanceMenager::isDateCorrect(string date)
-{
-    SupplementaryMethods supplementaryMethods;
-    SYSTEMTIME st;
-    GetSystemTime(&st);
-
-    string dateYear, dateMonth, dateDay;
-    int checkDateYear, checkDateMonth, checkDateDay;
-
-    for(int i = 0; i < date.length(); i++)
-    {
-        if((date[4] != '-') || (date[7] != '-'))
-        {
-            return false;
-        }
-        else if(i < 4)
-        {
-            dateYear += date[i];
-        }
-        else if((i > 4) && (i < 7))
-        {
-            dateMonth += date[i];
-        }
-        else if(i > 7)
-        {
-            dateDay += date[i];
-        }
-    }
-
-    checkDateYear = supplementaryMethods.conversionStringToInteger(dateYear);
-    checkDateMonth = supplementaryMethods.conversionStringToInteger(dateMonth);
-    checkDateDay = supplementaryMethods.conversionStringToInteger(dateDay);
-
-    if(((checkDateYear >= 2000) && (checkDateYear <= st.wYear)) && ((checkDateMonth >= 1) && (checkDateMonth <= 12)) && (numbersOfDaysInMonth(checkDateMonth, checkDateYear) >= checkDateDay))
-    {
-        if(checkDateYear == st.wYear)
-        {
-            if(checkDateMonth <= st.wMonth)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
-    }
-}
-
-int FinanceMenager::numbersOfDaysInMonth(int month, int year)
-{
-    switch(month)
-    {
-    case 1:
-        return 31;
-        break;
-    case 2:
-        if(isLeapYear(year) == true)
-        {
-            return 29;
-            break;
-        }
-        else
-        {
-            return 28;
-            break;
-        }
-        break;
-    case 3:
-        return 31;
-        break;
-    case 4:
-        return 30;
-        break;
-    case 5:
-        return 31;
-        break;
-    case 6:
-        return 30;
-        break;
-    case 7:
-        return 31;
-        break;
-    case 8:
-        return 31;
-        break;
-    case 9:
-        return 30;
-        break;
-    case 10:
-        return 31;
-        break;
-    case 11:
-        return 30;
-        break;
-    case 12:
-        return 31;
-        break;
-    }
-}
-
-bool FinanceMenager::isLeapYear(int year)
-{
-    if(year == 2000)
-    {
-        return true;
-    }
-    else if(year % 4 == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void FinanceMenager::balanceOfCurrentMonth()
 {
     Income income;
     Expense expense;
-    SupplementaryMethods supplementaryMethods;
-
-    SYSTEMTIME st;
-    GetSystemTime(&st);
-
-    string date, dateYear, dateMonth;
-    int checkDateYear, checkDateMonth;
     int sumOfIncomes = 0;
     int sumOfExpenses = 0;
 
@@ -497,6 +331,32 @@ void FinanceMenager::balanceOfCurrentMonth()
     cout << "Przychody" << endl;
     cout << "Data -- Tytul -- Kwota" << endl;
     cout << endl;
+
+    sumOfIncomes = searchSavedDataIntoIncomesByCurrentMonth(sumOfIncomes);
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    sumOfExpenses = searchSavedDataIntoExpensesByCurrentMonth(sumOfExpenses);
+
+    showSumOfIncomesAndExpenses(sumOfIncomes, sumOfExpenses);
+
+    system("pause");
+}
+
+int FinanceMenager::searchSavedDataIntoIncomesByCurrentMonth(int sumOfIncomes)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
 
     vector <Income>::iterator itr1;
     for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
@@ -529,11 +389,19 @@ void FinanceMenager::balanceOfCurrentMonth()
         date.clear();
     }
 
-    cout << "--------------------------------------------------------------------------------------------" << endl;
-    cout << endl;
-    cout << "Wydatki" << endl;
-    cout << "Data -- Tytul -- Kwota" << endl;
-    cout << endl;
+    return sumOfIncomes;
+}
+
+int FinanceMenager::searchSavedDataIntoExpensesByCurrentMonth(int sumOfExpenses)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
 
     vector <Expense>::iterator itr2;
     for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
@@ -566,6 +434,11 @@ void FinanceMenager::balanceOfCurrentMonth()
         date.clear();
     }
 
+    return sumOfExpenses;
+}
+
+void FinanceMenager::showSumOfIncomesAndExpenses(int sumOfIncomes,int sumOfExpenses)
+{
     cout << endl;
     cout << "--------------------------------------------------------------------------------------------" << endl;
     cout << endl;
@@ -588,20 +461,12 @@ void FinanceMenager::balanceOfCurrentMonth()
     }
 
     cout << endl;
-    system("pause");
 }
 
 void FinanceMenager::balanceOfPreviousMonth()
 {
     Income income;
     Expense expense;
-    SupplementaryMethods supplementaryMethods;
-
-    SYSTEMTIME st;
-    GetSystemTime(&st);
-
-    string date, dateYear, dateMonth;
-    int checkDateYear, checkDateMonth;
     int sumOfIncomes = 0;
     int sumOfExpenses = 0;
 
@@ -617,6 +482,32 @@ void FinanceMenager::balanceOfPreviousMonth()
     cout << "Przychody" << endl;
     cout << "Data -- Tytul -- Kwota" << endl;
     cout << endl;
+
+    sumOfIncomes = searchSavedDataIntoIncomesByPreviousMonth(sumOfIncomes);
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    sumOfExpenses = searchSavedDataIntoExpensesByPreviousMonth(sumOfExpenses);
+
+    showSumOfIncomesAndExpenses(sumOfIncomes, sumOfExpenses);
+
+    system("pause");
+}
+
+int FinanceMenager::searchSavedDataIntoIncomesByPreviousMonth(int sumOfIncomes)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
 
     vector <Income>::iterator itr1;
     for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
@@ -657,11 +548,19 @@ void FinanceMenager::balanceOfPreviousMonth()
         date.clear();
     }
 
-    cout << "--------------------------------------------------------------------------------------------" << endl;
-    cout << endl;
-    cout << "Wydatki" << endl;
-    cout << "Data -- Tytul -- Kwota" << endl;
-    cout << endl;
+    return sumOfIncomes;
+}
+
+int FinanceMenager::searchSavedDataIntoExpensesByPreviousMonth(int sumOfExpenses)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+
+    string date, dateYear, dateMonth;
+    int checkDateYear, checkDateMonth;
 
     vector <Expense>::iterator itr2;
     for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
@@ -688,7 +587,7 @@ void FinanceMenager::balanceOfPreviousMonth()
             if((checkDateYear == st.wYear - 1) && (checkDateMonth == 12))
             {
                 cout << itr2->loadDate() << " -- " << itr2->loadItem() << " -- " << itr2->loadAmount() << " " << "zl" << endl;
-                sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr1->loadAmount());
+                sumOfExpenses += supplementaryMethods.conversionStringToInteger(itr2->loadAmount());
             }
         }
         else if((checkDateYear == st.wYear) && (checkDateMonth == (st.wMonth - 1)))
@@ -702,30 +601,7 @@ void FinanceMenager::balanceOfPreviousMonth()
         date.clear();
     }
 
-    cout << endl;
-    cout << "--------------------------------------------------------------------------------------------" << endl;
-    cout << endl;
-
-    cout << "Suma przychodow: " << sumOfIncomes << " " << "zl" << endl;
-    cout << endl;
-    cout << "Suma wydatkow: " << sumOfExpenses << " " << "zl" << endl;
-    cout << endl;
-
-    if((sumOfIncomes - sumOfExpenses) > 0)
-    {
-        cout << "Oszczednosci: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-    else if((sumOfIncomes - sumOfExpenses) < 0)
-    {
-        cout << "Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-    else
-    {
-        cout << "Oszczednosci / Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-
-    cout << endl;
-    system("pause");
+    return sumOfExpenses;
 }
 
 void FinanceMenager::balanceOfSelectedPeriod()
@@ -733,18 +609,11 @@ void FinanceMenager::balanceOfSelectedPeriod()
     Income income;
     Expense expense;
     SupplementaryMethods supplementaryMethods;
-
-    string date, dateYear, dateMonth, dateDay;
-    string dateFrom, dateFromYear, dateFromMonth, dateFromDay;
-    string dateTo, dateToYear, dateToMonth, dateToDay;
-
-    int checkDateYear, checkDateMonth, checkDateDay;
-    int checkDateFromYear, checkDateFromMonth, checkDateFromDay;
-    int checkDateToYear, checkDateToMonth, checkDateToDay;
-    int checkYearCounter, checkMonthCounter, checkDayCounter;
-
     int sumOfIncomes = 0;
     int sumOfExpenses = 0;
+    int counter = 0;
+
+    string dateFrom, dateTo;
 
     sort(incomes.begin(), incomes.end(), [](Income &lhs, Income &rhs) {
       return lhs.loadDateConvertionForSort() < rhs.loadDateConvertionForSort();
@@ -766,7 +635,35 @@ void FinanceMenager::balanceOfSelectedPeriod()
     cout << "Data -- Tytul -- Kwota" << endl;
     cout << endl;
 
-    int counter = 0;
+    sumOfIncomes = searchSavedDataIntoIncomesBySelectedPeriod(counter, sumOfIncomes, dateFrom, dateTo);
+
+    cout << "--------------------------------------------------------------------------------------------" << endl;
+    cout << endl;
+    cout << "Wydatki" << endl;
+    cout << "Data -- Tytul -- Kwota" << endl;
+    cout << endl;
+
+    sumOfExpenses = searchSavedDataIntoExpensesBySelectedPeriod(counter, sumOfExpenses, dateFrom, dateTo);
+
+    showSumOfIncomesAndExpenses(sumOfIncomes, sumOfExpenses);
+
+    system("pause");
+}
+
+int FinanceMenager::searchSavedDataIntoIncomesBySelectedPeriod(int counter, int sumOfIncomes, string dateFrom, string dateTo)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    string date, dateYear, dateMonth, dateDay;
+    string dateFromYear, dateFromMonth, dateFromDay;
+    string dateToYear, dateToMonth, dateToDay;
+
+    int checkDateYear, checkDateMonth, checkDateDay;
+    int checkDateFromYear, checkDateFromMonth, checkDateFromDay;
+    int checkDateToYear, checkDateToMonth, checkDateToDay;
+    int checkYearCounter, checkMonthCounter, checkDayCounter;
+
     vector <Income>::iterator itr1;
     for(itr1 = incomes.begin(); itr1 != incomes.end(); itr1++)
     {
@@ -833,7 +730,7 @@ void FinanceMenager::balanceOfSelectedPeriod()
                     break;
             }
 
-            if(numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
+            if(dateMenager.numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
             {
                 checkDayCounter++;
             }
@@ -865,11 +762,22 @@ void FinanceMenager::balanceOfSelectedPeriod()
         date.clear();
     }
 
-    cout << "--------------------------------------------------------------------------------------------" << endl;
-    cout << endl;
-    cout << "Wydatki" << endl;
-    cout << "Data -- Tytul -- Kwota" << endl;
-    cout << endl;
+    return sumOfIncomes;
+}
+
+int FinanceMenager::searchSavedDataIntoExpensesBySelectedPeriod(int counter, int sumOfExpenses, string dateFrom, string dateTo)
+{
+    SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
+
+    string date, dateYear, dateMonth, dateDay;
+    string dateFromYear, dateFromMonth, dateFromDay;
+    string dateToYear, dateToMonth, dateToDay;
+
+    int checkDateYear, checkDateMonth, checkDateDay;
+    int checkDateFromYear, checkDateFromMonth, checkDateFromDay;
+    int checkDateToYear, checkDateToMonth, checkDateToDay;
+    int checkYearCounter, checkMonthCounter, checkDayCounter;
 
     vector <Expense>::iterator itr2;
     for(itr2 = expenses.begin(); itr2 != expenses.end(); itr2++)
@@ -937,7 +845,7 @@ void FinanceMenager::balanceOfSelectedPeriod()
                     break;
             }
 
-            if(numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
+            if(dateMenager.numbersOfDaysInMonth(checkMonthCounter, checkYearCounter) > checkDayCounter)
             {
                 checkDayCounter++;
             }
@@ -969,28 +877,5 @@ void FinanceMenager::balanceOfSelectedPeriod()
         date.clear();
     }
 
-    cout << endl;
-    cout << "--------------------------------------------------------------------------------------------" << endl;
-    cout << endl;
-
-    cout << "Suma przychodow: " << sumOfIncomes << " " << "zl" << endl;
-    cout << endl;
-    cout << "Suma wydatkow: " << sumOfExpenses << " " << "zl" << endl;
-    cout << endl;
-
-    if((sumOfIncomes - sumOfExpenses) > 0)
-    {
-        cout << "Oszczednosci: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-    else if((sumOfIncomes - sumOfExpenses) < 0)
-    {
-        cout << "Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-    else
-    {
-        cout << "Oszczednosci / Straty: " << sumOfIncomes - sumOfExpenses << " " << "zl" << endl;
-    }
-
-    cout << endl;
-    system("pause");
+    return sumOfExpenses;
 }

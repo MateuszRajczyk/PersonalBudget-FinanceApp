@@ -39,7 +39,6 @@ public:
     int loadIdOfLoggedUser();
     void changePasswordOfLoggedUser();
     void userLoggingOut();
-    bool isUserLoggedIn();
 };
 
 #endif

@@ -1,27 +1,7 @@
 #include "FileWithFinance.h"
 #include "windows.h"
 #include "FinanceMenager.h"
-
-int FileWithFinance::convertDateIntoNumber(string date)
-{
-    string dateNoHyphen = "";
-    int dateNumberId = 0;
-
-    SupplementaryMethods supplementaryMethods;
-
-    for(int i = 0; i < date.length(); i++)
-    {
-        if(date[i] != '-')
-        {
-            dateNoHyphen += date[i];
-        }
-    }
-
-    dateNumberId = supplementaryMethods.conversionStringToInteger(dateNoHyphen);
-
-    return dateNumberId;
-}
-
+#include "DateMenager.h"
 
 int FileWithFinance::loadIdLastIncome()
 {
@@ -125,6 +105,7 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
     vector<Income> incomes;
     Income income;
     SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
     int dateNumberForSort = 0;
 
     xml.Load( "incomes.xml" );
@@ -148,7 +129,7 @@ vector<Income> FileWithFinance::loadIncomesOfLoggedUserFromFile(int idOfLoggedUs
 
             xml.FindChildElem( "date" );
             income.setDate(xml.GetChildData());
-            dateNumberForSort = convertDateIntoNumber(xml.GetChildData());
+            dateNumberForSort = dateMenager.convertDateIntoNumber(xml.GetChildData());
             income.setDateConvertionForSort(dateNumberForSort);
 
             xml.FindChildElem( "item" );
@@ -189,6 +170,7 @@ vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLogged
     vector<Expense> expenses;
     Expense expense;
     SupplementaryMethods supplementaryMethods;
+    DateMenager dateMenager;
     int dateNumberForSort = 0;
 
     xml.Load( "expenses.xml" );
@@ -212,7 +194,7 @@ vector<Expense> FileWithFinance::loadExpensesOfLoggedUserFromFile(int idOfLogged
 
             xml.FindChildElem( "date" );
             expense.setDate(xml.GetChildData());
-            dateNumberForSort = convertDateIntoNumber(xml.GetChildData());
+            dateNumberForSort = dateMenager.convertDateIntoNumber(xml.GetChildData());
             expense.setDateConvertionForSort(dateNumberForSort);
 
             xml.FindChildElem( "item" );

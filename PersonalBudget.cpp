@@ -9,10 +9,7 @@ void PersonalBudget::userLogin()
 {
     userMenager.userLogin();
 
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager = new FinanceMenager(NAME_FILE_WITH_INCOMES, NAME_FILE_WITH_EXPENSES, userMenager.loadIdOfLoggedUser());
-    }
+    financeMenager = new FinanceMenager(NAME_FILE_WITH_INCOMES, NAME_FILE_WITH_EXPENSES, userMenager.loadIdOfLoggedUser());
 }
 
 char PersonalBudget::selectOptionsFromRegisterMenu()
@@ -77,52 +74,25 @@ void PersonalBudget::userLoggingOut()
 
 void PersonalBudget::addIncome()
 {
-
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager->addNewIncome();
-    }
-    else
-    {
-        cout << "Aby dodac przychod, nalezy najpierw sie zalogowac" << endl;
-        system("pause");
-    }
+    financeMenager->addNewIncome();
 }
 
 void PersonalBudget::addExpense()
 {
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager->addNewExpense();
-    }
-    else
-    {
-        cout << "Aby dodac wydatek, nalezy najpierw sie zalogowac" << endl;
-        system("pause");
-    }
-
+    financeMenager->addNewExpense();
 }
 
 void PersonalBudget::balanceOfCurrentMonth()
 {
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager->balanceOfCurrentMonth();
-    }
+    financeMenager->balanceOfCurrentMonth();
 }
 
 void PersonalBudget::balanceOfSelectedPeriod()
 {
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager->balanceOfSelectedPeriod();
-    }
+    financeMenager->balanceOfSelectedPeriod();
 }
 
 void PersonalBudget::balanceOfPreviousMonth()
 {
-    if(userMenager.isUserLoggedIn())
-    {
-        financeMenager->balanceOfPreviousMonth();
-    }
+    financeMenager->balanceOfPreviousMonth();
 }

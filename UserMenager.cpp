@@ -39,10 +39,7 @@ User UserMenager::enterDataOfNewUser()
 
 int UserMenager::loadIdOfNewUser()
 {
-    if (users.empty() == true)
-        return 1;
-    else
-        return users.back().loadUserId() + 1;
+    return (users.empty()) ? 1 : (users.back().loadUserId() + 1);
 }
 
 bool UserMenager::isLoginExist(string login)
@@ -131,14 +128,6 @@ void UserMenager::changePasswordOfLoggedUser()
 void UserMenager::userLoggingOut()
 {
     idOfLoggedUser = 0;
-}
-
-bool UserMenager::isUserLoggedIn()
-{
-    if(idOfLoggedUser > 0)
-        return true;
-    else
-        return false;
 }
 
 

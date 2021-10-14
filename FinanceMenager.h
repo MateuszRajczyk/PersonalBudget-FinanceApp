@@ -11,6 +11,7 @@
 #include "Income.h"
 #include "Expense.h"
 #include "SupplementaryMethods.h"
+#include "DateMenager.h"
 
 
 
@@ -44,18 +45,20 @@ public:
     void addIncomeWithSelectedDate();
     void addNewExpense();
     char selectOptionsFromAddIncomeMenu();
-    bool isDateCorrect(string date);
-    bool isLeapYear(int year);
-    int numbersOfDaysInMonth(int month, int year);
     char selectOptionsFromAddExpenseMenu();
     void addExpenseFromCurrentDay();
     bool appendExpenseToFile(Expense expense);
     void addExpenseWithSelectedDate();
     void balanceOfCurrentMonth();
     void balanceOfPreviousMonth();
-    //int convertDateIntoNumber(string date);
     void balanceOfSelectedPeriod();
-
+    void showSumOfIncomesAndExpenses(int sumOfIncomes,int sumOfExpenses);
+    int searchSavedDataIntoIncomesByCurrentMonth(int sumOfIncomes);
+    int searchSavedDataIntoExpensesByCurrentMonth(int sumOfExpenses);
+    int searchSavedDataIntoIncomesByPreviousMonth(int sumOfIncomes);
+    int searchSavedDataIntoExpensesByPreviousMonth(int sumOfExpenses);
+    int searchSavedDataIntoIncomesBySelectedPeriod(int counter, int sumOfIncomes, string dateFrom, string dateTo);
+    int searchSavedDataIntoExpensesBySelectedPeriod(int counter, int sumOfIncomes, string dateFrom, string dateTo);
 
 };
 
